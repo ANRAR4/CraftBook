@@ -89,7 +89,7 @@ public class InventoryUtil {
             if(!ItemUtil.isStackValid(stack))
                 continue;
 
-            if (ItemUtil.isFurnacable(stack) && fitsInSlot(stack, furnace.getInventory().getSmelting())) {
+            if (ItemUtil.isFurnaceable(stack) && fitsInSlot(stack, furnace.getInventory().getSmelting())) {
                 if (furnace.getInventory().getSmelting() == null)
                     furnace.getInventory().setSmelting(stack);
                 else
