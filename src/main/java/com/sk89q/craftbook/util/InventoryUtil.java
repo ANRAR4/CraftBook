@@ -1,6 +1,7 @@
 package com.sk89q.craftbook.util;
 
 import org.bukkit.Material;
+import org.bukkit.block.BlastFurnace;
 import org.bukkit.block.Block;
 import org.bukkit.block.BrewingStand;
 import org.bukkit.block.Chest;
@@ -8,6 +9,7 @@ import org.bukkit.block.ChiseledBookshelf;
 import org.bukkit.block.Crafter;
 import org.bukkit.block.Furnace;
 import org.bukkit.block.ShulkerBox;
+import org.bukkit.block.Smoker;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.DoubleChestInventory;
@@ -89,12 +91,12 @@ public class InventoryUtil {
             if(!ItemUtil.isStackValid(stack))
                 continue;
 
-            if (ItemUtil.isFurnaceable(stack) && fitsInSlot(stack, furnace.getInventory().getSmelting())) {
+            if (((furnace instanceof Smoker && ItemUtil.isCookable(stack)) || (furnace instanceof BlastFurnace && ItemUtil.isBlastSmeltable(stack)) || (furnace instanceof Furnace && !(furnace instanceof Smoker) && !(furnace instanceof BlastFurnace) && ItemUtil.isSmeltable(stack))) && fitsPartiallyInSlot(stack, furnace.getInventory().getSmelting())) {
                 if (furnace.getInventory().getSmelting() == null)
                     furnace.getInventory().setSmelting(stack);
                 else
                     leftovers.add(ItemUtil.addToStack(furnace.getInventory().getSmelting(), stack));
-            } else if (ItemUtil.isAFuel(stack) && fitsInSlot(stack, furnace.getInventory().getFuel())) {
+            } else if (ItemUtil.isAFuel(stack) && fitsPartiallyInSlot(stack, furnace.getInventory().getFuel())) {
                 if (furnace.getInventory().getFuel() == null)
                     furnace.getInventory().setFuel(stack);
                 else
@@ -123,13 +125,13 @@ public class InventoryUtil {
 
         for(ItemStack stack : stacks) {
             BrewerInventory inv = brewingStand.getInventory();
-            if (ItemUtil.isAPotionIngredient(stack) && InventoryUtil.fitsInSlot(stack, inv.getIngredient())) {
+            if (ItemUtil.isAPotionIngredient(stack) && InventoryUtil.fitsPartiallyInSlot(stack, inv.getIngredient())) {
                 if (inv.getIngredient() == null) {
                     inv.setIngredient(stack);
                 } else {
                     leftovers.add(ItemUtil.addToStack(inv.getIngredient(), stack));
                 }
-            } else if (stack.getType() == Material.BLAZE_POWDER && InventoryUtil.fitsInSlot(stack, inv.getFuel())) {
+            } else if (stack.getType() == Material.BLAZE_POWDER && InventoryUtil.fitsPartiallyInSlot(stack, inv.getFuel())) {
                 if (inv.getFuel() == null) {
                     inv.setFuel(stack);
                 } else {
@@ -328,6 +330,18 @@ public class InventoryUtil {
     public static boolean fitsInSlot(ItemStack stack, ItemStack slot) {
 
         return slot == null || ItemUtil.areItemsIdentical(stack, slot) && stack.getAmount() + slot.getAmount() <= stack.getMaxStackSize();
+    }
+
+    /**
+     * Checks whether the itemstack can partially stack onto the other itemstack.
+     * 
+     * @param stack The stack to add.
+     * @param slot The base stack.
+     * @return whether it can be added or not.
+     */
+    public static boolean fitsPartiallyInSlot(ItemStack stack, ItemStack slot) {
+
+        return slot == null || (ItemUtil.areItemsIdentical(stack, slot) && slot.getAmount() < stack.getMaxStackSize());
     }
 
     /**
