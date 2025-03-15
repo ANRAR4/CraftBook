@@ -56,38 +56,32 @@ public final class ItemUtil {
             Recipe recipe = it.next();
 
             if (recipe instanceof FurnaceRecipe) {
-                
                 if (((FurnaceRecipe)recipe).getInputChoice() instanceof MaterialChoice) {
                     for (Material choice : 
                          ((MaterialChoice)((FurnaceRecipe)recipe).getInputChoice()).getChoices()) {
                         smeltableItems.put(choice, ((FurnaceRecipe)recipe).getResult());
                     }
-                }
-                else {
+                } else {
                     smeltableItems.put(((FurnaceRecipe)recipe).getInput().getType(), 
                                        ((FurnaceRecipe)recipe).getResult());
                 }
-            }
-            else if (recipe instanceof BlastingRecipe) {
+            } else if (recipe instanceof BlastingRecipe) {
                 if (((BlastingRecipe)recipe).getInputChoice() instanceof MaterialChoice) {
                     for (Material choice : 
                          ((MaterialChoice)((BlastingRecipe)recipe).getInputChoice()).getChoices()) {
                         blastSmeltableItems.put(choice, ((BlastingRecipe)recipe).getResult());
                     }
-                }
-                else {
+                } else {
                     blastSmeltableItems.put(((BlastingRecipe)recipe).getInput().getType(), 
                                        ((BlastingRecipe)recipe).getResult());
                 }
-            }
-            else if (recipe instanceof CookingRecipe) {
+            } else if (recipe instanceof CookingRecipe) {
                 if (((CookingRecipe)recipe).getInputChoice() instanceof MaterialChoice) {
                     for (Material choice : 
                          ((MaterialChoice)((CookingRecipe)recipe).getInputChoice()).getChoices()) {
                         cookableItems.put(choice, ((CookingRecipe)recipe).getResult());
                     }
-                }
-                else {
+                } else {
                     cookableItems.put(((CookingRecipe)recipe).getInput().getType(), 
                                       ((CookingRecipe)recipe).getResult());
                 }
@@ -532,8 +526,7 @@ public final class ItemUtil {
 
         if (cookableItems.containsKey(item.getType())) {
             return new ItemStack(cookableItems.get(item.getType()));
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -547,8 +540,7 @@ public final class ItemUtil {
 
         if (smeltableItems.containsKey(item.getType())) {
             return new ItemStack(smeltableItems.get(item.getType()));
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -562,8 +554,7 @@ public final class ItemUtil {
 
         if (blastSmeltableItems.containsKey(item.getType())) {
             return new ItemStack(blastSmeltableItems.get(item.getType()));
-        }
-        else {
+        } else {
             return null;
         }
     }
