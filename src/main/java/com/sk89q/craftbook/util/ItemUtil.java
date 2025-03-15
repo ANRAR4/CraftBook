@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
@@ -55,13 +56,41 @@ public final class ItemUtil {
             Recipe recipe = it.next();
 
             if (recipe instanceof FurnaceRecipe) {
-                smeltableItems.put(((FurnaceRecipe)recipe).getInput().getType(), ((FurnaceRecipe)recipe).getResult());
+                
+                if (((FurnaceRecipe)recipe).getInputChoice() instanceof MaterialChoice) {
+                    for (Material choice : 
+                         ((MaterialChoice)((FurnaceRecipe)recipe).getInputChoice()).getChoices()) {
+                        smeltableItems.put(choice, ((FurnaceRecipe)recipe).getResult());
+                    }
+                }
+                else {
+                    smeltableItems.put(((FurnaceRecipe)recipe).getInput().getType(), 
+                                       ((FurnaceRecipe)recipe).getResult());
+                }
             }
             else if (recipe instanceof BlastingRecipe) {
-                blastSmeltableItems.put(((BlastingRecipe)recipe).getInput().getType(), ((BlastingRecipe)recipe).getResult());
+                if (((BlastingRecipe)recipe).getInputChoice() instanceof MaterialChoice) {
+                    for (Material choice : 
+                         ((MaterialChoice)((BlastingRecipe)recipe).getInputChoice()).getChoices()) {
+                        blastSmeltableItems.put(choice, ((BlastingRecipe)recipe).getResult());
+                    }
+                }
+                else {
+                    blastSmeltableItems.put(((BlastingRecipe)recipe).getInput().getType(), 
+                                       ((BlastingRecipe)recipe).getResult());
+                }
             }
             else if (recipe instanceof CookingRecipe) {
-                cookableItems.put(((CookingRecipe)recipe).getInput().getType(), ((CookingRecipe)recipe).getResult());
+                if (((CookingRecipe)recipe).getInputChoice() instanceof MaterialChoice) {
+                    for (Material choice : 
+                         ((MaterialChoice)((CookingRecipe)recipe).getInputChoice()).getChoices()) {
+                        cookableItems.put(choice, ((CookingRecipe)recipe).getResult());
+                    }
+                }
+                else {
+                    cookableItems.put(((CookingRecipe)recipe).getInput().getType(), 
+                                      ((CookingRecipe)recipe).getResult());
+                }
             }
         }
     }
